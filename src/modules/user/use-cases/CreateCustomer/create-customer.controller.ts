@@ -31,6 +31,7 @@ export default class CreateCustomerController {
     dto: CreateCustomerDTO,
   ) {
     const result = await this.useCase.execute({
+      name: dto.name,
       email: dto.email,
       password: dto.password,
     });

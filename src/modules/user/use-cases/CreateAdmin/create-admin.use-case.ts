@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UserAggregate } from '../../domain/entities/User';
+import { UserAggregate } from '../../domain/entities/user';
 import { IUserRepository } from '../../repository/user-repository.interface';
 import { IExceptionService } from 'src/core/domain/exceptions/exceptions.interface';
 
@@ -25,6 +25,7 @@ export default class CreateAdminUseCase {
 }
 
 type Input = {
+  name: string;
   email: string;
   password: string;
 };

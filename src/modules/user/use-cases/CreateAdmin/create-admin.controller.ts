@@ -25,6 +25,7 @@ export default class CreateAdminController {
     dto: CreateAdminDTO,
   ) {
     const result = await this.useCase.execute({
+      name: dto.name,
       email: dto.email,
       password: dto.password,
     });

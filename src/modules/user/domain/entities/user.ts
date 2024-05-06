@@ -3,7 +3,9 @@ import { Types } from 'mongoose';
 import Password from '../value-objects/Password';
 
 type UserRole = 'customer' | 'admin';
+
 interface UserProps {
+  name: string;
   email: string;
   password: Password;
   roles: UserRole[];
@@ -11,11 +13,13 @@ interface UserProps {
 
 class UserAggregate extends AggregateRoot<UserProps> {
   static async createCustomer(props: {
+    name: string;
     email: string;
     password: string;
   }): Promise<UserAggregate> {
     const newObjectId = new Types.ObjectId();
     return new UserAggregate(newObjectId.toString(), {
+      name: props.name,
       email: props.email,
       password: await Password.create(props.password, process.env.SALT),
       roles: ['customer'],
@@ -23,11 +27,13 @@ class UserAggregate extends AggregateRoot<UserProps> {
   }
 
   static async createAdmin(props: {
+    name: string;
     email: string;
     password: string;
   }): Promise<UserAggregate> {
     const newObjectId = new Types.ObjectId();
     return new UserAggregate(newObjectId.toString(), {
+      name: props.name,
       email: props.email,
       password: await Password.create(props.password, process.env.SALT),
       roles: ['admin'],
@@ -36,9 +42,16 @@ class UserAggregate extends AggregateRoot<UserProps> {
 
   static restore(
     id: string,
-    props: { email: string; password: string; salt: string; roles: UserRole[] },
+    props: {
+      name: string;
+      email: string;
+      password: string;
+      salt: string;
+      roles: UserRole[];
+    },
   ): UserAggregate {
     return new UserAggregate(id, {
+      name: props.name,
       email: props.email,
       password: new Password({ value: props.password, salt: props.salt }),
       roles: props.roles,

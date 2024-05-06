@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { UserAggregate } from '../domain/entities/User';
+import { UserAggregate } from '../domain/entities/user';
 import { IUserRepository } from './user-repository.interface';
 import { Model } from 'mongoose';
 import { User } from 'src/core/infra/database/mongo/schemas/user.schema';
@@ -12,6 +12,7 @@ class UserRepository implements IUserRepository {
     if (!user) return null;
     const roles = user.roles as ('customer' | 'admin')[];
     return UserAggregate.restore(user._id.toString(), {
+      name: user.name,
       email: user.email,
       password: user.password,
       salt: process.env.SALT,
@@ -24,6 +25,7 @@ class UserRepository implements IUserRepository {
     if (!user) return null;
     const roles = user.roles as ('customer' | 'admin')[];
     return UserAggregate.restore(user._id.toString(), {
+      name: user.name,
       email: user.email,
       password: user.password,
       salt: process.env.SALT,
@@ -34,6 +36,7 @@ class UserRepository implements IUserRepository {
   async create(entity: UserAggregate): Promise<void> {
     const user = new this.userModel({
       _id: entity.id,
+      name: entity.props.name,
       email: entity.props.email,
       password: entity.props.password.props.value,
       roles: entity.props.roles,
