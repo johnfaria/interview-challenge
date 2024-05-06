@@ -2,14 +2,15 @@ import { AggregateRoot } from 'src/core/domain/aggregate';
 import { Types } from 'mongoose';
 import Password from '../value-objects/Password';
 
+type UserRole = 'customer' | 'admin';
 interface UserProps {
   email: string;
   password: Password;
-  roles?: string[];
+  roles: UserRole[];
 }
 
 class UserAggregate extends AggregateRoot<UserProps> {
-  static async create(props: {
+  static async createCustomer(props: {
     email: string;
     password: string;
   }): Promise<UserAggregate> {
@@ -17,13 +18,25 @@ class UserAggregate extends AggregateRoot<UserProps> {
     return new UserAggregate(newObjectId.toString(), {
       email: props.email,
       password: await Password.create(props.password, process.env.SALT),
-      roles: ['user'],
+      roles: ['customer'],
+    });
+  }
+
+  static async createAdmin(props: {
+    email: string;
+    password: string;
+  }): Promise<UserAggregate> {
+    const newObjectId = new Types.ObjectId();
+    return new UserAggregate(newObjectId.toString(), {
+      email: props.email,
+      password: await Password.create(props.password, process.env.SALT),
+      roles: ['admin'],
     });
   }
 
   static restore(
     id: string,
-    props: { email: string; password: string; salt: string; roles?: string[] },
+    props: { email: string; password: string; salt: string; roles: UserRole[] },
   ): UserAggregate {
     return new UserAggregate(id, {
       email: props.email,
@@ -34,6 +47,14 @@ class UserAggregate extends AggregateRoot<UserProps> {
 
   async validatePassword(password: string): Promise<boolean> {
     return this.props.password.validate(password);
+  }
+
+  isCustomer(): boolean {
+    return this.props.roles.includes('customer');
+  }
+
+  isAdmin(): boolean {
+    return this.props.roles.includes('admin');
   }
 }
 

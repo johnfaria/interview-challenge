@@ -1,28 +1,28 @@
 import { Controller, Inject, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
-import UserLoginUseCase from './UserLogin.use-case';
-import UserLoginDTO from './UserLogin.types';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
+import CreateAdminDTO from './create-admin.protocols';
+import CreateAdminUseCase from './create-admin.use-case';
 
-@Controller('user/signin')
-export default class UserLoginController {
+@Controller('user/admin/signup')
+export default class CreateAdminController {
   constructor(
-    @Inject('UserLoginUseCase')
-    private readonly useCase: UserLoginUseCase,
+    @Inject('CreateAdminUseCase')
+    private readonly useCase: CreateAdminUseCase,
   ) {}
 
   @Post()
   @ApiOperation({
-    summary: 'SignIn User',
+    summary: 'Create new admin',
   })
   @ApiBody({
-    type: UserLoginDTO,
+    type: CreateAdminDTO,
   })
   async execute(
     @JoinRequestParams({
-      dto: UserLoginDTO,
+      dto: CreateAdminDTO,
     })
-    dto: UserLoginDTO,
+    dto: CreateAdminDTO,
   ) {
     const result = await this.useCase.execute({
       email: dto.email,

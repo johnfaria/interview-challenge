@@ -9,4 +9,5 @@ export interface IExceptionService {
   unauthorizedException(data?: IFormatExceptionMessage): void;
   notFoundException(data?: IFormatExceptionMessage): void;
   alreadyExistsException(data?: IFormatExceptionMessage): void;
+  throwConflict(data?: IFormatExceptionMessage): void;
 }

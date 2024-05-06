@@ -33,4 +33,8 @@ export class ExceptionsService implements IExceptionService {
   alreadyExistsException(data?: IFormatExceptionMessage): void {
     throw new BadRequestException(data);
   }
+
+  throwConflict(data?: IFormatExceptionMessage): void {
+    throw new BadRequestException(data);
+  }
 }

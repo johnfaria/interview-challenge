@@ -10,22 +10,24 @@ class UserRepository implements IUserRepository {
   async findById(entityId: string): Promise<UserAggregate | null> {
     const user = await this.userModel.findOne({ _id: entityId });
     if (!user) return null;
+    const roles = user.roles as ('customer' | 'admin')[];
     return UserAggregate.restore(user._id.toString(), {
       email: user.email,
       password: user.password,
       salt: process.env.SALT,
-      roles: user.roles,
+      roles: roles,
     });
   }
 
   async findByEmail(email: string): Promise<UserAggregate | null> {
     const user = await this.userModel.findOne({ email: email });
     if (!user) return null;
+    const roles = user.roles as ('customer' | 'admin')[];
     return UserAggregate.restore(user._id.toString(), {
       email: user.email,
       password: user.password,
       salt: process.env.SALT,
-      roles: user.roles,
+      roles: roles,
     });
   }
 
