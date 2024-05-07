@@ -1,9 +1,10 @@
 import { Controller, Inject, Post } from '@nestjs/common';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
 import CreateAdminDTO from './create-admin.protocols';
 import CreateAdminUseCase from './create-admin.use-case';
 
+@ApiTags('Users')
 @Controller('user/admin/signup')
 export default class CreateAdminController {
   constructor(

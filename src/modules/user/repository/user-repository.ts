@@ -41,7 +41,7 @@ class UserRepository implements IUserRepository {
       password: entity.props.password.props.value,
       roles: entity.props.roles,
     });
-    user.save();
+    await user.save();
   }
 
   update(_: UserAggregate): Promise<void> {
@@ -50,6 +50,10 @@ class UserRepository implements IUserRepository {
 
   findAll(): Promise<UserAggregate[]> {
     throw new Error('Method not implemented.');
+  }
+
+  async delete(entityId: string): Promise<void> {
+    await this.userModel.deleteOne({ _id: entityId });
   }
 }
 

@@ -3,4 +3,5 @@ export interface IRepository<Entity> {
   findAll(): Promise<Entity[]>;
   create(entity: Entity): Promise<void>;
   update(entity: Entity): Promise<void>;
+  delete(entityId: string): Promise<void>;
 }

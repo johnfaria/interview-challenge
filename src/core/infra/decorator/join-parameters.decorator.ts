@@ -13,8 +13,8 @@ export const JoinRequestParams = createParamDecorator(
       ...request.body,
       ...request.params,
       ...request.query,
+      userId: request.user ? request.user.sub : null,
     });
-
     const errors = await validate(result);
     const errorMessages = errors
       .map((error) =>

@@ -3,7 +3,15 @@ import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({
+  // toJSON: {
+  //   virtuals: true,
+  //   getters: true,
+  // },
+  toObject: {
+    virtuals: true,
+  },
+})
 export class User {
   @Prop({ type: String, unique: true, index: 1, required: true })
   email: string;
@@ -18,4 +26,13 @@ export class User {
   roles: string[];
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.virtual('pets', {
+  ref: 'Pet',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false,
+});
+
+export { UserSchema };
