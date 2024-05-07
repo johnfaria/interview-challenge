@@ -1,15 +1,36 @@
 import { Inject } from '@nestjs/common';
-import { IExceptionService } from 'src/core/domain/exceptions/exceptions.interface';
+import IHealthPlanRepository from '../../repositories/healplan.repository.interface';
+import HealthPlanAggregate from '../../domain/entities/healthplan';
 
 export default class CreateHealthPlanUseCase {
   constructor(
-    @Inject('ExceptionsService')
-    private readonly exceptionService: IExceptionService,
+    @Inject('HealthPlanRepository')
+    private readonly healthPlanRepository: IHealthPlanRepository,
   ) {}
 
-  async execute(_: Input): Promise<Output> {}
+  async execute(input: Input): Promise<Output> {
+    const healthPlan = HealthPlanAggregate.create(input);
+    await this.healthPlanRepository.create(healthPlan);
+    return {
+      id: healthPlan.id,
+      ...healthPlan.props,
+    };
+  }
 }
 
-type Input = any;
+type Input = {
+  name: string;
+  description: string;
+  company: string;
+  price: number;
+  status: 'active' | 'inactive';
+};
 
-type Output = any;
+type Output = {
+  id: string;
+  name: string;
+  description: string;
+  company: string;
+  price: number;
+  status: 'active' | 'inactive';
+};

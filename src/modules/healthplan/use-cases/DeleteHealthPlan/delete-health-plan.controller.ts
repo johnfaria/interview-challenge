@@ -49,7 +49,6 @@ export default class DeleteHealthPlanController {
     })
     dto: DeleteHealthPlanDTO,
   ) {
-    // const result = await this.useCase.execute(dto);
-    return dto;
+    await this.useCase.execute(dto);
   }
 }

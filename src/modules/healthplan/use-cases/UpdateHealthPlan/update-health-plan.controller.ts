@@ -36,14 +36,13 @@ export default class UpdateHealthPlanController {
     type: 'string',
     required: true,
   })
-  @HttpCode(200)
+  @HttpCode(204)
   async execute(
     @JoinRequestParams({
       dto: UpdateHealthPlanDTO,
     })
     dto: UpdateHealthPlanDTO,
   ) {
-    // const result = await this.useCase.execute(dto);
-    return dto;
+    await this.useCase.execute(dto);
   }
 }

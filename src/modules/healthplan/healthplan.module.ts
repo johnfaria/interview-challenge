@@ -13,6 +13,10 @@ import {
 import { useCases } from './use-case.make';
 import { repositories } from './repositories.make';
 import { controllers } from './controllers.make';
+import {
+  HealthPlan,
+  HealthPlanSchema,
+} from 'src/core/infra/database/mongo/schemas/healthplan.schema';
 
 @Module({
   imports: [
@@ -21,6 +25,7 @@ import { controllers } from './controllers.make';
     MongooseModule.forFeature([
       { name: Pet.name, schema: PetSchema },
       { name: User.name, schema: UserSchema },
+      { name: HealthPlan.name, schema: HealthPlanSchema },
     ]),
   ],
   controllers: controllers,

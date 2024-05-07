@@ -43,7 +43,6 @@ export default class UpdatePetController {
     })
     dto: UpdatePetDTO,
   ) {
-    console.log(dto);
     await this.useCase.execute({
       petId: dto.petId,
       userId: dto.userId,

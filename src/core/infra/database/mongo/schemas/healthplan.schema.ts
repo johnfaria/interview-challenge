@@ -3,7 +3,9 @@ import { HydratedDocument } from 'mongoose';
 
 export type HealthPlanDocument = HydratedDocument<HealthPlan>;
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class HealthPlan {
   @Prop({ type: String, required: true })
   name: string;
@@ -12,7 +14,13 @@ export class HealthPlan {
   description: string;
 
   @Prop({ required: true })
+  company: string;
+
+  @Prop({ required: true })
   price: number;
+
+  @Prop({ required: true })
+  status: 'active' | 'inactive';
 }
 
 export const HealthPlanSchema = SchemaFactory.createForClass(HealthPlan);

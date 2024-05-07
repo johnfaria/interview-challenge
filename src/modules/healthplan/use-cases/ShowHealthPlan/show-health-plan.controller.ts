@@ -43,7 +43,7 @@ export default class ShowHealthPlanController {
     })
     dto: ShowHealthPlanDTO,
   ) {
-    // const result = await this.useCase.execute(dto);
-    return dto;
+    const result = await this.useCase.execute(dto);
+    return result;
   }
 }
