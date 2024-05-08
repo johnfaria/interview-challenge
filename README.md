@@ -35,6 +35,23 @@ To start development it is recommended to have these utilities installed in a lo
 
 ## 🚀 Running the app
 
+**Environment Variables Setup**
+
+To run the application locally, you'll need to create a file named `.env` in your project's root directory and populate it with the following environment variables:
+
+* `APP_PORT` (e.g., `3000`)
+* `JWT_SECRET` (your secret key)
+* `JWT_EXPIRATION` (e.g., `1d`)
+* `SALT` (your secret salt)
+* `MONGO_DB_URL` (your MongoDB connection string)
+* `EMAIL_HOST` (your email server host)
+* `EMAIL_PORT` (your email server port)
+* `EMAIL_USER` (your email username)
+* `EMAIL_PASS` (your email password)
+* `MAGIC_LINK_CALLBACK` (your callback URL)
+
+**Remember:** Never commit your `.env` file to version control or share it publicly.
+
 ### Start
 
 ```bash
@@ -64,4 +81,6 @@ npm run build
 
 ### Swagger Docs
 
-[http://localhost:3000/api/v1/docs](http://localhost:3000/api/v1/docs)
+```text
+/api/v1/docs
+```
