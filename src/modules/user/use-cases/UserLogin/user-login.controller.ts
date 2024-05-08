@@ -1,5 +1,5 @@
 import { Controller, Inject, Post } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import UserLoginUseCase from './user-login.use-case';
 import UserLoginDTO from './user-login.protocols';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
@@ -18,6 +18,14 @@ export default class UserLoginController {
   })
   @ApiBody({
     type: UserLoginDTO,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User logged in',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
   })
   async execute(
     @JoinRequestParams({

@@ -3,6 +3,7 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
@@ -31,6 +32,18 @@ export default class ShowPetController {
     name: 'petId',
     required: true,
     type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Pet found',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Pet not found',
   })
   async execute(
     @JoinRequestParams({

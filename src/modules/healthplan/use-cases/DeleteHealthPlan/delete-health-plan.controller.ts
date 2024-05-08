@@ -10,6 +10,7 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
@@ -43,6 +44,18 @@ export default class DeleteHealthPlanController {
     required: true,
   })
   @HttpCode(204)
+  @ApiResponse({
+    status: 204,
+    description: 'Health plan deleted',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Health plan not found',
+  })
   async execute(
     @JoinRequestParams({
       dto: DeleteHealthPlanDTO,

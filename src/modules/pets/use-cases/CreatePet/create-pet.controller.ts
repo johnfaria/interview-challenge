@@ -1,5 +1,11 @@
 import { Controller, HttpCode, Inject, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
@@ -26,6 +32,14 @@ export default class CreatePetController {
     type: CreatePetDTO,
   })
   @HttpCode(201)
+  @ApiResponse({
+    status: 201,
+    description: 'Pet created',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
   async execute(
     @JoinRequestParams({
       dto: CreatePetDTO,

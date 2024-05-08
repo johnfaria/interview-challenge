@@ -1,5 +1,11 @@
 import { Controller, Inject, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import CreateCustomerDTO from './create-customer.protocols';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
@@ -25,6 +31,14 @@ export default class CreateCustomerController {
     type: CreateCustomerDTO,
   })
   @ApiBearerAuth()
+  @ApiResponse({
+    status: 201,
+    description: 'Customer created',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
   async execute(
     @JoinRequestParams({
       dto: CreateCustomerDTO,

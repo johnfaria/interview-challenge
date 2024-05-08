@@ -1,5 +1,5 @@
 import { Controller, Inject, Post } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
 import CreateAdminDTO from './create-admin.protocols';
 import CreateAdminUseCase from './create-admin.use-case';
@@ -18,6 +18,10 @@ export default class CreateAdminController {
   })
   @ApiBody({
     type: CreateAdminDTO,
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Admin created',
   })
   async execute(
     @JoinRequestParams({

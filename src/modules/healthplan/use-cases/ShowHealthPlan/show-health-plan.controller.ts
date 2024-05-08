@@ -4,6 +4,7 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
@@ -37,6 +38,18 @@ export default class ShowHealthPlanController {
     required: true,
   })
   @HttpCode(200)
+  @ApiResponse({
+    status: 200,
+    description: 'Health plan found',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Health plan not found',
+  })
   async execute(
     @JoinRequestParams({
       dto: ShowHealthPlanDTO,

@@ -1,5 +1,10 @@
 import { Controller, Get, Inject, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JoinRequestParams } from 'src/core/infra/decorator/join-parameters.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
@@ -21,6 +26,14 @@ export default class ShowPetsByUserIdController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({
     summary: 'Show pets by user id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Pets found',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
   })
   async execute(
     @JoinRequestParams({
