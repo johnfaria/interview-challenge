@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 type GenerateJwtProps = {
@@ -7,18 +8,28 @@ type GenerateJwtProps = {
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   async generateJwt(payload: {
     userId: string;
     email: string;
     roles: string[];
   }): Promise<GenerateJwtProps> {
-    const accessToken = await this.jwtService.signAsync(
-      { sub: payload.userId, email: payload.email, roles: payload.roles },
-      {},
-    );
-    return { accessToken };
+    const cashedToken = await this.cacheManager.get<string>(payload.userId);
+
+    if (!cashedToken) {
+      const accessToken = await this.jwtService.signAsync(
+        { sub: payload.userId, email: payload.email, roles: payload.roles },
+        {},
+      );
+      await this.cacheManager.set(payload.userId, accessToken, 10);
+      return { accessToken };
+    }
+
+    return { accessToken: cashedToken };
   }
 
   async verifyJwt(token: string) {
