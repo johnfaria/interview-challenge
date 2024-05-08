@@ -1,6 +1,9 @@
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from 'src/core/infra/database/mongo/schemas/user.schema';
 
 type GenerateJwtProps = {
   accessToken: string;
@@ -11,6 +14,7 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
   async generateJwt(payload: {
@@ -36,5 +40,15 @@ export class AuthService {
     return this.jwtService.verifyAsync(token, {
       secret: process.env.JWT_SECRET,
     });
+  }
+
+  async validateUser(email: string) {
+    const user = await this.userModel.findOne({
+      email,
+    });
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return user;
   }
 }
