@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsString } from 'class-validator';
+import { IsDateString, IsMongoId, IsString } from 'class-validator';
 
 export class CreatePetDTO {
   @ApiProperty()
@@ -17,6 +17,7 @@ export class CreatePetDTO {
 
   @ApiProperty()
   @IsString()
+  @IsMongoId()
   healthPlanId: string;
 
   userId: string;

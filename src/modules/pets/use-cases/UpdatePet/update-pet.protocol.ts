@@ -1,8 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsDateString, IsMongoId, IsOptional } from 'class-validator';
 
 export default class UpdatePetDTO {
   userId: string;
+
+  @ApiProperty()
+  @IsMongoId()
   petId: string;
 
   @ApiProperty()
@@ -18,10 +21,11 @@ export default class UpdatePetDTO {
   specie: string;
 
   @ApiProperty()
-  @IsOptional()
+  @IsDateString()
   birthdate: string;
 
   @ApiProperty()
   @IsOptional()
+  @IsMongoId()
   newOwnerId: string;
 }

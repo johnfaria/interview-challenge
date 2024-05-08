@@ -1,9 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsIn, IsMongoId, IsNumber, IsString } from 'class-validator';
 
 export class UpdateHealthPlanDTO {
   userId: string;
 
+  @ApiProperty()
+  @IsMongoId()
   healthPlanId: string;
 
   @ApiProperty()
@@ -22,7 +24,8 @@ export class UpdateHealthPlanDTO {
   @IsNumber()
   price: number;
 
-  @ApiProperty()
+  @ApiProperty({ enum: ['active', 'inactive'] })
   @IsString()
+  @IsIn(['active', 'inactive'])
   status: 'active' | 'inactive';
 }
