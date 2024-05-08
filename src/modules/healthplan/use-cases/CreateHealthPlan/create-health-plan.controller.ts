@@ -46,7 +46,13 @@ export default class CreateHealthPlanController {
     })
     dto: CreateHealthPlanDTO,
   ) {
-    const result = await this.useCase.execute(dto);
+    const result = await this.useCase.execute({
+      name: dto.name,
+      description: dto.description,
+      company: dto.company,
+      price: dto.price,
+      status: dto.status,
+    });
     return result;
   }
 }

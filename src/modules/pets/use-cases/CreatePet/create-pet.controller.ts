@@ -38,6 +38,7 @@ export default class CreatePetController {
       specie: dto.specie,
       birthdate: dto.birthdate,
       userId: dto.userId,
+      healthPlanId: dto.healthPlanId,
     });
     return result;
   }

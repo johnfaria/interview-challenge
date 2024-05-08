@@ -34,6 +34,7 @@ export default class ShowPetUseCase {
       specie: pet.props.specie,
       birthdate: pet.props.birthdate.toISOString().slice(0, 10),
       userId: pet.props.userId,
+      healthPlanId: pet.props.healthPlanId,
     };
   }
 }
@@ -50,4 +51,5 @@ type Output = {
   specie: string;
   birthdate: string;
   userId: string;
+  healthPlanId: string;
 };

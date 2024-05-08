@@ -22,7 +22,7 @@ export default class HealthPlanRepository implements IHealthPlanRepository {
   }
 
   async create(entity: HealthPlanAggregate): Promise<void> {
-    const healthPlan = await this.healthPlanModel.create({
+    await this.healthPlanModel.create({
       _id: entity.id,
       name: entity.props.name,
       description: entity.props.description,
@@ -30,7 +30,6 @@ export default class HealthPlanRepository implements IHealthPlanRepository {
       price: entity.props.price,
       status: entity.props.status,
     });
-    await healthPlan.save();
   }
 
   async update(entity: HealthPlanAggregate): Promise<void> {

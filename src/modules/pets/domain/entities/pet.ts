@@ -6,7 +6,8 @@ interface PetProps {
   breed: string;
   specie: string;
   birthdate: Date;
-  userId?: string;
+  userId: string;
+  healthPlanId: string;
 }
 
 export class PetAggregate extends AggregateRoot<PetProps> {
@@ -19,7 +20,8 @@ export class PetAggregate extends AggregateRoot<PetProps> {
     breed: string;
     specie: string;
     birthdate: Date;
-    userId?: string;
+    userId: string;
+    healthPlanId: string;
   }): PetAggregate {
     const newObjectId = new Types.ObjectId();
     return new PetAggregate(newObjectId.toString(), {
@@ -28,6 +30,7 @@ export class PetAggregate extends AggregateRoot<PetProps> {
       specie: props.specie,
       birthdate: props.birthdate,
       userId: props.userId,
+      healthPlanId: props.healthPlanId,
     });
   }
 
@@ -38,7 +41,8 @@ export class PetAggregate extends AggregateRoot<PetProps> {
       breed: string;
       specie: string;
       birthdate: Date;
-      userId?: string;
+      userId: string;
+      healthPlanId: string;
     },
   ): PetAggregate {
     return new PetAggregate(id, {
@@ -47,6 +51,7 @@ export class PetAggregate extends AggregateRoot<PetProps> {
       specie: props.specie,
       birthdate: props.birthdate,
       userId: props.userId,
+      healthPlanId: props.healthPlanId,
     });
   }
 

@@ -2,15 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
-
 @Schema({
-  // toJSON: {
-  //   virtuals: true,
-  //   getters: true,
-  // },
   toObject: {
     virtuals: true,
   },
+  timestamps: true,
 })
 export class User {
   @Prop({ type: String, unique: true, index: 1, required: true })

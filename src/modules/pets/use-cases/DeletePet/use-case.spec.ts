@@ -17,12 +17,20 @@ import { IPetRepository } from '../../repository/pet.repository.interface';
 import { IUserRepository } from 'src/modules/user/repository/user-repository.interface';
 import { CoreModule } from 'src/core/core.module';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  HealthPlan,
+  HealthPlanSchema,
+} from 'src/core/infra/database/mongo/schemas/healthplan.schema';
+import HealthPlanRepository from 'src/modules/healthplan/repositories/healthplan.repository';
+import HealthPlanAggregate from 'src/modules/healthplan/domain/entities/healthplan';
 
 describe('DeletePetUseCase tests', () => {
   let useCase: DeletePetUseCase;
   let petRepository: IPetRepository;
   let userRepository: IUserRepository;
   let user: UserAggregate;
+  let healthPlanRepository: HealthPlanRepository;
+  let healthPlan: HealthPlanAggregate;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -32,6 +40,7 @@ describe('DeletePetUseCase tests', () => {
         MongooseModule.forFeature([
           { name: Pet.name, schema: PetSchema },
           { name: User.name, schema: UserSchema },
+          { name: HealthPlan.name, schema: HealthPlanSchema },
         ]),
       ],
       providers: [
@@ -39,6 +48,10 @@ describe('DeletePetUseCase tests', () => {
         {
           provide: 'PetRepository',
           useClass: PetRepository,
+        },
+        {
+          provide: 'HealthPlanRepository',
+          useClass: HealthPlanRepository,
         },
         {
           provide: 'UserRepository',
@@ -50,17 +63,31 @@ describe('DeletePetUseCase tests', () => {
     useCase = moduleRef.get(DeletePetUseCase);
     petRepository = moduleRef.get<PetRepository>('PetRepository');
     userRepository = moduleRef.get<UserRepository>('UserRepository');
+    healthPlanRepository = moduleRef.get<HealthPlanRepository>(
+      'HealthPlanRepository',
+    );
 
     user = await UserAggregate.createCustomer({
       name: 'Test User',
-      email: 'test_user@email.com',
+      email: 'test_user_delete_pet@email.com',
       password: 'Test@Password',
     });
     await userRepository.create(user);
+
+    healthPlan = HealthPlanAggregate.create({
+      name: 'Test Health Plan',
+      description: 'Test Description',
+      company: 'Test Company',
+      price: 100,
+      status: 'active',
+    });
+
+    await healthPlanRepository.create(healthPlan);
   });
 
   afterEach(async () => {
     await userRepository.delete(user.id);
+    await healthPlanRepository.delete(healthPlan.id);
   });
 
   it('should delete a pet', async () => {
@@ -70,6 +97,7 @@ describe('DeletePetUseCase tests', () => {
       specie: 'Canis lupus familiaris',
       birthdate: new Date('2020-01-01'),
       userId: user.id,
+      healthPlanId: healthPlan.id,
     });
     await petRepository.create(pet);
     // Arrange
@@ -104,6 +132,7 @@ describe('DeletePetUseCase tests', () => {
       specie: 'Canis lupus familiaris',
       birthdate: new Date('2020-01-01'),
       userId: user.id,
+      healthPlanId: healthPlan.id,
     });
     await petRepository.create(pet);
     const dto = {

@@ -18,12 +18,20 @@ import { IUserRepository } from 'src/modules/user/repository/user-repository.int
 import { CoreModule } from 'src/core/core.module';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import ShowPetUseCase from './show-pet.use-case';
+import {
+  HealthPlan,
+  HealthPlanSchema,
+} from 'src/core/infra/database/mongo/schemas/healthplan.schema';
+import HealthPlanRepository from 'src/modules/healthplan/repositories/healthplan.repository';
+import HealthPlanAggregate from 'src/modules/healthplan/domain/entities/healthplan';
 
 describe('ShowPetUseCase tests', () => {
   let useCase: ShowPetUseCase;
   let petRepository: IPetRepository;
   let userRepository: IUserRepository;
+  let healthPlanRepository: HealthPlanRepository;
   let user: UserAggregate;
+  let healthPlan: HealthPlanAggregate;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -33,6 +41,7 @@ describe('ShowPetUseCase tests', () => {
         MongooseModule.forFeature([
           { name: Pet.name, schema: PetSchema },
           { name: User.name, schema: UserSchema },
+          { name: HealthPlan.name, schema: HealthPlanSchema },
         ]),
       ],
       providers: [
@@ -40,6 +49,10 @@ describe('ShowPetUseCase tests', () => {
         {
           provide: 'PetRepository',
           useClass: PetRepository,
+        },
+        {
+          provide: 'HealthPlanRepository',
+          useClass: HealthPlanRepository,
         },
         {
           provide: 'UserRepository',
@@ -51,17 +64,31 @@ describe('ShowPetUseCase tests', () => {
     useCase = moduleRef.get(ShowPetUseCase);
     petRepository = moduleRef.get<IPetRepository>('PetRepository');
     userRepository = moduleRef.get<IUserRepository>('UserRepository');
+    healthPlanRepository = moduleRef.get<HealthPlanRepository>(
+      'HealthPlanRepository',
+    );
 
     user = await UserAggregate.createCustomer({
-      name: 'Test User Show Pet',
+      name: 'Test User',
       email: 'test_user_show_pet@email.com',
       password: 'Test@Password',
     });
     await userRepository.create(user);
+
+    healthPlan = HealthPlanAggregate.create({
+      name: 'Test Health Plan',
+      description: 'Test Description',
+      company: 'Test Company',
+      price: 100,
+      status: 'active',
+    });
+
+    await healthPlanRepository.create(healthPlan);
   });
 
   afterEach(async () => {
     await userRepository.delete(user.id);
+    await healthPlanRepository.delete(healthPlan.id);
   });
 
   it('should show a pet', async () => {
@@ -71,6 +98,7 @@ describe('ShowPetUseCase tests', () => {
       specie: 'Canis lupus familiaris',
       birthdate: new Date('2020-01-01'),
       userId: user.id,
+      healthPlanId: healthPlan.id,
     });
     await petRepository.create(pet);
     // Arrange
@@ -88,6 +116,7 @@ describe('ShowPetUseCase tests', () => {
       specie: pet.props.specie,
       birthdate: pet.props.birthdate.toISOString().slice(0, 10),
       userId: pet.props.userId,
+      healthPlanId: pet.props.healthPlanId,
     });
   });
 
@@ -111,6 +140,7 @@ describe('ShowPetUseCase tests', () => {
       specie: 'Canis lupus familiaris',
       birthdate: new Date('2020-01-01'),
       userId: user.id,
+      healthPlanId: healthPlan.id,
     });
     await petRepository.create(pet);
     const dto = {

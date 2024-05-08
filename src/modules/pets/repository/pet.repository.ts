@@ -19,7 +19,8 @@ export class PetRepository implements IPetRepository {
       breed: data.breed,
       specie: data.specie,
       birthdate: data.birthdate,
-      userId: data.user?.id.toString(),
+      userId: data.user.id.toString(),
+      healthPlanId: data.healthplan.toString(),
     });
   }
 
@@ -34,24 +35,21 @@ export class PetRepository implements IPetRepository {
         specie: pet.specie,
         birthdate: pet.birthdate,
         userId: pet.user.toString(),
+        healthPlanId: pet.healthplan.toString(),
       }),
     );
   }
 
   async create(entity: PetAggregate): Promise<void> {
-    // const users = await this.userModel
-    //   .findById(entity.props.userId)
-    //   .populate('pets');
-    // const data = await this.petModel.find({});
-    const pet = new this.petModel({
+    await this.petModel.create({
       _id: entity.id,
       name: entity.props.name,
       breed: entity.props.breed,
       specie: entity.props.specie,
       birthdate: entity.props.birthdate,
       user: new Types.ObjectId(entity.props.userId),
+      healthplan: new Types.ObjectId(entity.props.healthPlanId),
     });
-    await pet.save();
   }
 
   async update(entity: PetAggregate): Promise<void> {
@@ -63,6 +61,7 @@ export class PetRepository implements IPetRepository {
         specie: entity.props.specie,
         birthdate: entity.props.birthdate,
         user: new Types.ObjectId(entity.props.userId),
+        healthplan: new Types.ObjectId(entity.props.healthPlanId),
       },
     );
   }

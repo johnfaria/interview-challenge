@@ -34,14 +34,13 @@ class UserRepository implements IUserRepository {
   }
 
   async create(entity: UserAggregate): Promise<void> {
-    const user = new this.userModel({
+    await this.userModel.create({
       _id: entity.id,
       name: entity.props.name,
       email: entity.props.email,
       password: entity.props.password.props.value,
       roles: entity.props.roles,
     });
-    await user.save();
   }
 
   update(_: UserAggregate): Promise<void> {

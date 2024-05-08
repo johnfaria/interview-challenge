@@ -12,6 +12,7 @@ export default class CreatePetUseCase {
       specie: data.specie,
       birthdate: new Date(data.birthdate),
       userId: data.userId,
+      healthPlanId: data.healthPlanId,
     });
     await this.repository.create(pet);
     return {
@@ -21,6 +22,7 @@ export default class CreatePetUseCase {
       specie: pet.props.specie,
       birthdate: pet.props.birthdate.toISOString().slice(0, 10),
       userId: pet.props.userId,
+      healthPlanId: pet.props.healthPlanId,
     };
   }
 }
@@ -31,6 +33,7 @@ type Input = {
   specie: string;
   birthdate: string;
   userId: string;
+  healthPlanId: string;
 };
 
 type Output = {
@@ -40,4 +43,5 @@ type Output = {
   specie: string;
   birthdate: string;
   userId: string;
+  healthPlanId: string;
 };
