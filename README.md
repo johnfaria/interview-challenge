@@ -20,6 +20,7 @@ This project includes the following languages and libraries:
 - Linter: [Eslint](https://eslint.org/)
 - Testing: [Vitest](https://vitest.dev/)
 - Compiler: [swc](https://swc.rs/)
+- Email: [Nodemailer](https://www.nodemailer.com/)
 
 Auxiliary libraries and plugins were omitted but can be found in the `package.json` file.
 
